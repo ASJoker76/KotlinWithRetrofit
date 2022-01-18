@@ -1,0 +1,53 @@
+package com.example.myapplication.model.res
+
+class ResGetProfile {
+    val id_transporter = 0
+    val kd_transporter: String? = null
+    val type_transporter_id = 0
+    val nama_transporter: String? = null
+    val notelp: String? = null
+    val email: String? = null
+     val prov_perusahaan: String? = null
+     val kab_perusahaan: String? = null
+     val kec_perusahaan: String? = null
+     val kel_perusahaan: String? = null
+     val kode_pos_perusahaan = 0
+     val alamat_perusahaan: String? = null
+     val no_ktp_perusahaan: String? = null
+     val ktp_file_perusahaan: String? = null
+     val nonpwp: String? = null
+     val npwp_file_path: String? = null
+     val notdp: String? = null
+     val tdp_file_path: String? = null
+     val akta_pendirian: Long = 0
+     val akta_pendirian_file: String? = null
+     val akta_akhir: Long = 0
+     val akta_akhir_file: String? = null
+     val no_siup: String? = null
+     val no_siup_file: String? = null
+     val no_siujpt: String? = null
+     val no_siujpt_file: String? = null
+     val no_skt: String? = null
+     val no_skt_file: String? = null
+     val no_sppkp: String? = null
+     val no_sppkp_file: String? = null
+     val no_srt_domisili: String? = null
+     val srt_domisili_file: String? = null
+     val nama_pic: String? = null
+     val phone_pic: String? = null
+     val email_pic: String? = null
+     val alamat_pic: String? = null
+     val noktp_pic: String? = null
+     val ktp_pic_file_path: String? = null
+     val created_at: String? = null
+     val updated_at: String? = null
+     val status = 0
+     val create_by: String? = null
+     val update_by: String? = null
+     val user_id = 0
+     val status_id = 0
+     val star: String? = null
+     val komisi: String? = null
+     val id_top = 0
+     val profile_pic_path: String? = null
+}
