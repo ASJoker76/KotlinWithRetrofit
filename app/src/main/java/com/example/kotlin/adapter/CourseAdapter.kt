@@ -1,4 +1,4 @@
-package com.example.myapplication.adapter
+package com.example.kotlin.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,9 +8,8 @@ import android.view.animation.AlphaAnimation
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.MainActivity
-import com.example.myapplication.R
-import com.example.myapplication.model.res.ResBursaPengiriman
+import com.example.kotlin.R
+import com.example.kotlin.model.res.ResBursaPengiriman
 import java.util.ArrayList
 
 class CourseAdapter(val listCourses: ArrayList<ResBursaPengiriman?>, val context: Context) : RecyclerView.Adapter<CourseAdapter.CourseViewHolder>() {

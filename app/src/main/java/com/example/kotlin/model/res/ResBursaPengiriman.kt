@@ -1,4 +1,4 @@
-package com.example.myapplication.model.res
+package com.example.kotlin.model.res
 
 class ResBursaPengiriman {
      var no_order: String? = null

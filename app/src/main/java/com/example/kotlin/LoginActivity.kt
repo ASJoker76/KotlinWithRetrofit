@@ -1,22 +1,19 @@
-package com.example.myapplication
+package com.example.kotlin
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import cn.pedant.SweetAlert.SweetAlertDialog
-import cn.pedant.SweetAlert.SweetAlertDialog.OnSweetClickListener
-import com.example.myapplication.connection.CommentAPI
-import com.example.myapplication.connection.Retro
 
-import com.example.myapplication.databinding.ActivityLoginBinding
-import com.example.myapplication.model.res.ResLogin
+import com.example.kotlin.databinding.ActivityLoginBinding
+import com.example.kotlin.model.res.ResLogin
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
+import pokemon.co.id.connection.RetroInstance
+import pokemon.co.id.connection.RetroService
 
 import retrofit2.Call
 import retrofit2.Callback
@@ -76,9 +73,9 @@ class LoginActivity : AppCompatActivity() {
 
         // Create RequestBody ( We're not using any converter, like GsonConverter, MoshiConverter e.t.c, that's why we use RequestBody )
         val reqLogin = jsonObjectString.toRequestBody("application/json".toMediaTypeOrNull())
+        val retroInstance = RetroInstance.getRetroInstance().create(RetroService::class.java)
 
-        val retro = Retro().getRetroClientInstance().create(CommentAPI::class.java)
-        retro.loginRequest(reqLogin).enqueue(object : Callback<ResLogin>{
+        retroInstance.loginRequest(reqLogin).enqueue(object : Callback<ResLogin>{
             override fun onFailure(call: Call<ResLogin>, t: Throwable) {
 //                TODO("Not yet implemented")
                 Log.e("Failed", t.message.toString())

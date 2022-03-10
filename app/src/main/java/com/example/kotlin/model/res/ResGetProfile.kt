@@ -1,4 +1,4 @@
-package com.example.myapplication.model.res
+package com.example.kotlin.model.res
 
 class ResGetProfile {
     val id_transporter = 0

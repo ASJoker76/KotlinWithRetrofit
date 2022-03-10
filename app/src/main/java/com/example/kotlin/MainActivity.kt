@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.kotlin
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -10,21 +10,20 @@ import android.view.animation.OvershootInterpolator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.pedant.SweetAlert.SweetAlertDialog
-import cn.pedant.SweetAlert.SweetAlertDialog.OnSweetClickListener
 import com.bumptech.glide.Glide
-import com.example.myapplication.adapter.CourseAdapter
-import com.example.myapplication.connection.CommentAPI
-import com.example.myapplication.connection.Retro
+import com.example.kotlin.adapter.CourseAdapter
 
-import com.example.myapplication.databinding.ActivityMainBinding
-import com.example.myapplication.model.res.ResBursaPengiriman
-import com.example.myapplication.model.res.ResGetProfile
+import com.example.kotlin.databinding.ActivityMainBinding
+import com.example.kotlin.model.res.ResBursaPengiriman
+import com.example.kotlin.model.res.ResGetProfile
 import com.google.gson.Gson
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
+import pokemon.co.id.connection.RetroInstance
+import pokemon.co.id.connection.RetroService
 import retrofit2.Call
 import retrofit2.Response
 
@@ -85,8 +84,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getProfile() {
-        val retro2 = Retro().getRetroClientInstance().create(CommentAPI::class.java)
-        val call = retro2.getProfile(token)
+        val retroInstance = RetroInstance.getRetroInstance().create(RetroService::class.java)
+        val call = retroInstance.getProfile(token)
         if (token != null) {
             call.enqueue(object : retrofit2.Callback<ResGetProfile> {
                 override fun onFailure(call: Call<ResGetProfile>?, t: Throwable?) {
@@ -124,10 +123,9 @@ class MainActivity : AppCompatActivity() {
         // Create RequestBody ( We're not using any converter, like GsonConverter, MoshiConverter e.t.c, that's why we use RequestBody )
         val reqBursaPengiriman = jsonObjectString.toRequestBody("application/json".toMediaTypeOrNull())
 
-
-        val retro = Retro().getRetroClientInstance().create(CommentAPI::class.java)
+        val retroInstance = RetroInstance.getRetroInstance().create(RetroService::class.java)
         if (token != null) {
-            retro.listBursaPengiriman(token!!,reqBursaPengiriman).enqueue(object : retrofit2.Callback<List<ResBursaPengiriman>> {
+            retroInstance.listBursaPengiriman(token!!,reqBursaPengiriman).enqueue(object : retrofit2.Callback<List<ResBursaPengiriman>> {
                 override fun onResponse(call: Call<List<ResBursaPengiriman>>, response: Response<List<ResBursaPengiriman>>)
                 {
                     val resTenderTransporterList = response.body()
