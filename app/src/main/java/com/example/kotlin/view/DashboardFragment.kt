@@ -10,24 +10,26 @@ import android.view.animation.OvershootInterpolator
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import cn.pedant.SweetAlert.SweetAlertDialog
+import com.example.kotlin.R
 import com.example.kotlin.adapter.ChatAdapter
-import com.example.kotlin.connection.MessageListener
-import com.example.kotlin.connection.WebSocketManager
+import com.example.kotlin.connection.PieSocketListener
 import com.example.kotlin.databinding.FragmentDashboardBinding
 import com.example.kotlin.model.res.ResChat
 import com.example.kotlin.viewmodel.DashboardViewModel
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter
-import io.ktor.http.cio.websocket.*
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.WebSocket
 import pokemon.co.id.connection.Host.BASE_URL_CHAT
 
-class DashboardFragment : Fragment(), MessageListener {
+class DashboardFragment : Fragment() {
 
     private lateinit var username: String
     private lateinit var chatArrayList: java.util.ArrayList<ResChat>
     private lateinit var chatAdapter: ChatAdapter
     private var viewModel: DashboardViewModel? = null
     private lateinit var binding: FragmentDashboardBinding
-    private var socket: WebSocketSession? = null
 
 
     override fun onCreateView(
@@ -42,31 +44,61 @@ class DashboardFragment : Fragment(), MessageListener {
         loadclick()
         //callApiList();
         viewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
-        viewModel?.panggilapi()
-        viewModel?.getRecyclerListDataObserver()?.observe(viewLifecycleOwner, Observer<List<ResChat>>{
-            if(it != null) {
-                //update the adapter
-                chatArrayList.addAll(it)
-                chatAdapter?.setDataList(it as ArrayList<ResChat>)
-            } else {
-                Log.e("isi data", "")
-            }
+        viewModel?.chatLiveData?.observe(viewLifecycleOwner, Observer {
+            Log.d("TAG", "onCreate: $it")
+            chatArrayList.addAll(it)
+            chatAdapter?.setDataList(it as ArrayList<ResChat>)
         })
+        viewModel?.dataerror?.observe(viewLifecycleOwner, Observer {
+
+        })
+        viewModel?.panggilapi()
 
         return binding.root
     }
 
     private fun loadclick() {
-        kotlin.run {
-            WebSocketManager.connect()
-        }
         binding.btnKirim.setOnClickListener {
-            if (WebSocketManager.sendMessage(binding.etIsiPesan.text.toString())){
-                //addText(username)
+
+            if(binding.etIsiPesan.text.isNotEmpty()){
+                val client: OkHttpClient = OkHttpClient();
+
+                Log.d("PieSocket", "Connecting");
+                var apiKey =
+                    "oCdCMcMPQpbvNjUIzqtvF1d2X2okWpDQj4AwARJuAgtjhzKxVEjQU6IdCjwm"; //Demo key, get yours at https://piesocket.com
+                var channelId = 1;
+
+                val request: Request = Request
+                    .Builder()
+                    .url(BASE_URL_CHAT +"?username=$username")
+                    .build()
+                val listener = PieSocketListener()
+                val ws: WebSocket = client.newWebSocket(request, listener)
+
+                ws.send(binding.etIsiPesan.text.toString())
                 binding.etIsiPesan.text.clear()
-                viewModel?.panggilapi()
-                chatAdapter?.setDataList(chatArrayList as ArrayList<ResChat>)
+//                chatArrayList.clear()
+//                viewModel?.panggilapi()
+//                chatAdapter?.setDataList(chatArrayList)
+                val bundle = Bundle()
+                bundle.putString("username", username)
+                val fragementIntent = DashboardFragment()
+                val transaction = activity?.supportFragmentManager?.beginTransaction()
+
+                transaction?.replace(R.id.fl_view, fragementIntent)
+                fragementIntent.setArguments(bundle)
+                transaction!!.addToBackStack(null)
+                transaction?.commit()
             }
+            else{
+                SweetAlertDialog(activity, SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText("Chat Kosong")
+                    .setConfirmClickListener { sDialog ->
+                        sDialog.dismissWithAnimation()
+                    }
+                    .show()
+            }
+
         }
 
     }
@@ -75,7 +107,6 @@ class DashboardFragment : Fragment(), MessageListener {
         val bundle = this.arguments
         if (bundle != null) {
             username = bundle?.getString("username").toString()
-            WebSocketManager.init(BASE_URL_CHAT+"?username=$username", this)
         }
     }
 
@@ -97,29 +128,4 @@ class DashboardFragment : Fragment(), MessageListener {
         alphaInAnimationAdapter.setFirstOnly(false)
     }
 
-
-    override fun onConnectSuccess() {
-        addText("Connect\n")
-    }
-
-    override fun onConnectFailed() {
-        addText("Not Connect\n")
-    }
-
-    override fun onClose() {
-        addText("Connect Close\n")
-    }
-
-    override fun onMessage(text: String?) {
-        addText("Pesan：$text\n")
-    }
-
-    private fun addText(text: String?) {
-        Log.e("status", text.toString())
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        WebSocketManager.close()
-    }
 }

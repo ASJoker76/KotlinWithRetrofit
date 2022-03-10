@@ -1,28 +1,35 @@
 package com.example.kotlin.adapter
 
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlin.R
-import com.example.kotlin.databinding.ListItemChatBinding
 import com.example.kotlin.model.res.ResChat
 import java.text.DateFormat
 import java.util.*
+import android.widget.LinearLayout
+import com.example.kotlin.databinding.ListItemChatLeftBinding
+
 
 class ChatAdapter(
-    private val username: String)
+    private val username: String,
+//    private var chatArrayList: ArrayList<ResChat>
+)
     : RecyclerView.Adapter<ChatAdapter.MyViewHolder>() {
 
-    var resultss = ArrayList<ResChat>()
+    var resultss = mutableListOf<ResChat>()
+
     private val lastPosition = -1
-    private var viewBinding: ListItemChatBinding? = null
+    private var viewBinding: ListItemChatLeftBinding? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatAdapter.MyViewHolder {
         viewBinding =
-            ListItemChatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ListItemChatLeftBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(viewBinding!!)
     }
 
@@ -43,8 +50,13 @@ class ChatAdapter(
             holder.viewBinding.tvNama.setText(resResults.username)
             holder.viewBinding.tvIsiChat.setText(resResults.text)
             holder.viewBinding.tvDate.setText(formattedDate)
+
+            holder.viewBinding.tvNama.setTextColor(R.color.white)
+            holder.viewBinding.tvIsiChat.setTextColor(R.color.white)
+            holder.viewBinding.tvDate.setTextColor(R.color.white)
         }
         else{
+
             holder.viewBinding.clView.setBackgroundResource(R.drawable.other_balloon_shape)
             holder.viewBinding.tvNama.setText(resResults.username)
             holder.viewBinding.tvIsiChat.setText(resResults.text)
@@ -67,8 +79,8 @@ class ChatAdapter(
 
 
 
-    class MyViewHolder(binding: ListItemChatBinding) : RecyclerView.ViewHolder(binding.getRoot()) {
-        val viewBinding: ListItemChatBinding
+    class MyViewHolder(binding: ListItemChatLeftBinding) : RecyclerView.ViewHolder(binding.getRoot()) {
+        val viewBinding: ListItemChatLeftBinding
 
         init {
             viewBinding = binding
@@ -80,7 +92,29 @@ class ChatAdapter(
     }
 
     fun setDataList(data :  ArrayList<ResChat>) {
-        this.resultss = data
+        this.resultss = data.toMutableList()
+//        this.chatArrayList = data
         notifyDataSetChanged()
     }
+
+//    class ChatFromItem: ClipData.Item<MyViewHolder>() {
+//        override fun bind(holder: MyViewHolder, position: Int) {
+//
+//        }
+//
+//        override fun getLayout(): Int {
+//            return R.layout.chat_from_row
+//        }
+//    }
+//
+//    class ChatToItem: ClipData.Item<MyViewHolder>() {
+//        override fun bind (holder: MyViewHolder, position: Int) {
+//
+//        }
+//        override fun getlayout(): Int {
+//            return R.layout.chat_to_row
+//        }
+//    }
+
+
 }

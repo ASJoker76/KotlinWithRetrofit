@@ -4,9 +4,10 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="10dp"
-    android:background="@drawable/my_balloon_shape"
+    android:background="@drawable/other_balloon_shape"
     android:padding="20dp"
-    android:id="@+id/cl_view">
+    android:id="@+id/cl_view"
+    android:layout_gravity="left">
 
         <TextView
             android:id="@+id/tv_nama"
@@ -14,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="nama"
-            android:textColor="@color/white"
+            android:textColor="@color/blue"
             android:textStyle="bold"/>
 
         <TextView
@@ -24,7 +25,7 @@
             android:layout_height="wrap_content"
             android:inputType="text|textMultiLine"
             android:text="chat"
-            android:textColor="@color/white"/>
+            android:textColor="@color/blue"/>
 
         <TextView
             android:id="@+id/tv_date"
@@ -35,6 +36,6 @@
             android:layout_height="wrap_content"
             android:text="Tanggal"
             android:gravity="right"
-            android:textColor="@color/white"/>
+            android:textColor="@color/blue"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
